@@ -50,25 +50,16 @@ if st.button("📋 Vis oppsummering"):
 
     st.markdown("### 🧾 Full oppsummering")
     for i, block in enumerate(st.session_state.kpi_blocks):
-        kpi = st.session_state.get(f"kpi_{i}", "")
-        tiltak_sist = st.session_state.get(f"tiltak_sist_{i}", "")
-        status_sist = st.session_state.get(f"status_sist_{i}", "")
-        status_no = st.session_state.get(f"status_no_{i}", "")
-        fungerte = st.session_state.get(f"fungerte_{i}", "")
-        mal_neste = st.session_state.get(f"mal_neste_{i}", "")
-        tiltak_neste = st.session_state.get(f"tiltak_neste_{i}", "")
+        st.markdown(f"**KPI {i + 1}:**")
+        st.markdown(f"- KPI: {st.session_state.get(f'kpi_{i}', '')}")
+        st.markdown(f"- Tiltak sist: {st.session_state.get(f'tiltak_sist_{i}', '')}")
+        st.markdown(f"- Status sist: {st.session_state.get(f'status_sist_{i}', '')}")
+        st.markdown(f"- Status no: {st.session_state.get(f'status_no_{i}', '')}")
+        st.markdown(f"- Kva fungerte / fungerte ikkje: {st.session_state.get(f'fungerte_{i}', '')}")
+        st.markdown(f"- Mål til neste gang: {st.session_state.get(f'mal_neste_{i}', '')}")
+        st.markdown(f"- Tiltak til neste gang: {st.session_state.get(f'tiltak_neste_{i}', '')}")
+        st.markdown("---")
 
-        st.markdown(f"""
-        **KPI {i+1}: {kpi}**
-        - **Tiltak sist:** {tiltak_sist}
-        - **Status sist:** {status_sist}
-        - **Status no:** {status_no}
-        - **Kva fungerte / fungerte ikkje:** {fungerte}
-        - **Mål til neste gang:** {mal_neste}
-        - **Tiltak til neste gang:** {tiltak_neste}
-        """)
-
-    st.markdown("---")
     st.subheader("📌 Kort oppsummering")
     for i, block in enumerate(st.session_state.kpi_blocks):
         kpi = st.session_state.get(f"kpi_{i}", "")
@@ -79,4 +70,3 @@ if st.button("📋 Vis oppsummering"):
         - 🎯 *Mål:* {mal_neste}
         - 🛠️ *Tiltak:* {tiltak_neste}
         """)
-
