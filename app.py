@@ -65,8 +65,13 @@ if st.button("📋 Vis oppsummering"):
         kpi = st.session_state.get(f"kpi_{i}", "")
         mal_neste = st.session_state.get(f"mal_neste_{i}", "")
         tiltak_neste = st.session_state.get(f"tiltak_neste_{i}", "")
-        st.markdown(f"""
-        **{i+1}. {kpi}**
-        - 🎯 *Mål:* {mal_neste}
-        - 🛠️ *Tiltak:* {tiltak_neste}
-        """)
+        
+        st.markdown(f"**{i+1}. {kpi}**")
+        
+        if mal_neste.strip():
+            st.markdown("🎯 *Mål:*")
+            st.code(mal_neste, language=None)
+        
+        if tiltak_neste.strip():
+            st.markdown("🛠️ *Tiltak:*")
+            st.code(tiltak_neste, language=None)
