@@ -1,7 +1,12 @@
 import streamlit as st
+from datetime import date
 
 st.set_page_config(page_title="KPI Oppfølging", layout="centered")
 st.title("KPI Oppfølging")
+
+# Name and date input
+name = st.text_input("Navn")
+dato = st.date_input("Dato", value=date.today())
 
 # Initialize session state for KPI blocks
 if "kpi_blocks" not in st.session_state:
@@ -34,9 +39,16 @@ for i, block in enumerate(st.session_state.kpi_blocks):
 
 st.button("➕ Legg til ny KPI", on_click=add_block)
 
-# Show full + short summary
+# Show summaries
 if st.button("📋 Vis oppsummering"):
-    st.subheader("🧾 Full oppsummering")
+    heading = "Oppfølging"
+    if name:
+        heading += f" – {name}"
+    if dato:
+        heading += f" – {dato.strftime('%d.%m.%Y')}"
+    st.subheader(heading)
+
+    st.markdown("### 🧾 Full oppsummering")
     for i, block in enumerate(st.session_state.kpi_blocks):
         kpi = st.session_state.get(f"kpi_{i}", "")
         tiltak_sist = st.session_state.get(f"tiltak_sist_{i}", "")
@@ -67,3 +79,4 @@ if st.button("📋 Vis oppsummering"):
         - 🎯 *Mål:* {mal_neste}
         - 🛠️ *Tiltak:* {tiltak_neste}
         """)
+
