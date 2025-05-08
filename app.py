@@ -1,12 +1,13 @@
 import streamlit as st
 from datetime import date
+import uuid
 
 st.set_page_config(page_title="KPI Skjema", layout="centered")
 st.title("📝 KPI Skjema")
 
 # Initialize session state
 if "kpi_blocks" not in st.session_state:
-    st.session_state.kpi_blocks = [0]
+    st.session_state.kpi_blocks = [str(uuid.uuid4())]
 
 # Name and date input
 name = st.text_input("Navn")
@@ -16,24 +17,24 @@ def remove_block(index):
     st.session_state.to_remove_index = index
 
 # Render KPI blocks
-for i, block in enumerate(st.session_state.kpi_blocks):
+for i, block_id in enumerate(st.session_state.kpi_blocks):
     with st.container():
         st.markdown(f"### KPI {i+1}")
-        kpi = st.text_area("KPI", height=50, key=f"kpi_{i}")
-        tiltak_sist = st.text_area("Tiltak sist", height=100, key=f"tiltak_sist_{i}")
-        status_sist = st.text_area("Status sist", height=100, key=f"status_sist_{i}")
-        status_no = st.text_area("Status no", height=100, key=f"status_no_{i}")
-        fungerte = st.text_area("Kva fungerte / fungerte ikkje", height=150, key=f"fungerte_{i}")
-        mal_neste = st.text_area("Mål til neste gang", height=100, key=f"mal_neste_{i}")
-        tiltak_neste = st.text_area("Tiltak til neste gang", height=100, key=f"tiltak_neste_{i}")
+        kpi = st.text_area("KPI", height=50, key=f"kpi_{block_id}")
+        tiltak_sist = st.text_area("Tiltak sist", height=100, key=f"tiltak_sist_{block_id}")
+        status_sist = st.text_area("Status sist", height=100, key=f"status_sist_{block_id}")
+        status_no = st.text_area("Status no", height=100, key=f"status_no_{block_id}")
+        fungerte = st.text_area("Kva fungerte / fungerte ikkje", height=150, key=f"fungerte_{block_id}")
+        mal_neste = st.text_area("Mål til neste gang", height=100, key=f"mal_neste_{block_id}")
+        tiltak_neste = st.text_area("Tiltak til neste gang", height=100, key=f"tiltak_neste_{block_id}")
 
         # Remove button
-        if st.button("Fjern", key=f"remove_{i}"):
-            remove_block(i)
+        if st.button("Fjern", key=f"remove_{block_id}"):
+            st.session_state.to_remove_index = block_id
 
 # Add button
 if st.button("➕ Legg til KPI"):
-    st.session_state.kpi_blocks.append(len(st.session_state.kpi_blocks))
+    st.session_state.kpi_blocks.append(str(uuid.uuid4()))
 
 # Generate summaries
 if st.button("📋 Vis oppsummering"):
@@ -91,14 +92,10 @@ if st.button("📋 Vis oppsummering"):
 
 # Handle block removal AFTER widgets render
 if "to_remove_index" in st.session_state:
-    idx = st.session_state.to_remove_index
-    if 0 <= idx < len(st.session_state.kpi_blocks):
-        st.session_state.kpi_blocks.pop(idx)
-        for key in [
-            f"kpi_{idx}", f"tiltak_sist_{idx}", f"status_sist_{idx}", f"status_no_{idx}",
-            f"fungerte_{idx}", f"mal_neste_{idx}", f"tiltak_neste_{idx}"
-        ]:
-            st.session_state.pop(key, None)
+    block_id = st.session_state.to_remove_index
+    if block_id in st.session_state.kpi_blocks:
+        st.session_state.kpi_blocks.remove(block_id)
+        for prefix in ["kpi", "tiltak_sist", "status_sist", "status_no", "fungerte", "mal_neste", "tiltak_neste"]:
+            st.session_state.pop(f"{prefix}_{block_id}", None)
     del st.session_state.to_remove_index
     st.experimental_rerun()
-
