@@ -97,7 +97,7 @@ if st.button("📋 Vis oppsummering"):
 
     st.markdown(full_summary)
 
-    short_summary = f"\n📌 **TIL NESTE GANG**\n"
+    short_summary = f"\n📌 **KORT OPPSUMMERING**\n"
     for i, block in enumerate(st.session_state.kpi_blocks):
         kpi = st.session_state.get(f"kpi_{i}", "")
         mal_neste = st.session_state.get(f"mal_neste_{i}", "")
@@ -110,3 +110,11 @@ if st.button("📋 Vis oppsummering"):
 
 🛠️ **Tiltak til neste gang**  
 {tiltak_neste}
+
+---
+"
+
+    st.markdown(short_summary)
+
+    # Combined output
+    combined_summary = full_summary + "\n\n" + short_summary
