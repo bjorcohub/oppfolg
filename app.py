@@ -16,8 +16,7 @@ def add_block():
     st.session_state.kpi_blocks.append({"id": len(st.session_state.kpi_blocks)})
 
 def remove_block(index):
-    st.session_state.kpi_blocks.pop(index)
-    st.experimental_rerun()
+    st.session_state.to_remove_index = index
 
 st.subheader("KPI-skjema")
 
@@ -36,6 +35,19 @@ for i, block in enumerate(st.session_state.kpi_blocks):
         with col1:
             if st.button("🗑️ Fjern", key=f"remove_{i}"):
                 remove_block(i)
+    # Handle block removal safely after widget rendering
+if "to_remove_index" in st.session_state:
+    idx = st.session_state.to_remove_index
+    if 0 <= idx < len(st.session_state.kpi_blocks):
+        st.session_state.kpi_blocks.pop(idx)
+        for key in [
+            f"kpi_{idx}", f"tiltak_sist_{idx}", f"status_sist_{idx}", f"status_no_{idx}",
+            f"fungerte_{idx}", f"mal_neste_{idx}", f"tiltak_neste_{idx}"
+        ]:
+            st.session_state.pop(key, None)
+    del st.session_state.to_remove_index
+    # ✅ Safe to rerun here
+    st.experimental_rerun()
 
 st.button("➕ Legg til ny KPI", on_click=add_block)
 
