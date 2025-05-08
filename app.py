@@ -16,13 +16,20 @@ def add_block():
     st.session_state.kpi_blocks.append({"id": len(st.session_state.kpi_blocks)})
 
 def remove_block(index):
-    st.session_state.kpi_blocks.pop(index)
-    st.experimental_rerun()
+    st.session_state.to_remove_index = index
 
 st.subheader("KPI-skjema")
 
 # Display KPI entry blocks
 for i, block in enumerate(st.session_state.kpi_blocks):
+    # Safe removal AFTER UI is built
+if "to_remove_index" in st.session_state:
+    idx = st.session_state.to_remove_index
+    if 0 <= idx < len(st.session_state.kpi_blocks):
+        st.session_state.kpi_blocks.pop(idx)
+    del st.session_state.to_remove_index
+    st.experimental_rerun()
+
     with st.expander(f"KPI {i + 1}", expanded=True):
         kpi = st.text_input("KPI", key=f"kpi_{i}")
         tiltak_sist = st.text_area("Tiltak sist", height=100, key=f"tiltak_sist_{i}")
