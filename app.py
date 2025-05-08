@@ -13,8 +13,8 @@ if "kpi_blocks" not in st.session_state:
 name = st.text_input("Navn")
 dato = st.date_input("Dato", value=date.today())
 
-def remove_block(index):
-    st.session_state.to_remove_index = index
+def remove_block(block_id):
+    st.session_state.to_remove_index = block_id
 
 # Render KPI blocks
 for i, block_id in enumerate(st.session_state.kpi_blocks):
@@ -30,7 +30,7 @@ for i, block_id in enumerate(st.session_state.kpi_blocks):
 
         # Remove button
         if st.button("Fjern", key=f"remove_{block_id}"):
-            st.session_state.to_remove_index = block_id
+            remove_block(block_id)
 
 # Add button
 if st.button("➕ Legg til KPI"):
@@ -48,14 +48,14 @@ if st.button("📋 Vis oppsummering"):
 
     full_summary = f"{heading}\n\n🧾 FULL OPPSUMMERING\n"
 
-    for i, block in enumerate(st.session_state.kpi_blocks):
-        kpi = st.session_state.get(f"kpi_{i}", "")
-        tiltak_sist = st.session_state.get(f"tiltak_sist_{i}", "")
-        status_sist = st.session_state.get(f"status_sist_{i}", "")
-        status_no = st.session_state.get(f"status_no_{i}", "")
-        fungerte = st.session_state.get(f"fungerte_{i}", "")
-        mal_neste = st.session_state.get(f"mal_neste_{i}", "")
-        tiltak_neste = st.session_state.get(f"tiltak_neste_{i}", "")
+    for i, block_id in enumerate(st.session_state.kpi_blocks):
+        kpi = st.session_state.get(f"kpi_{block_id}", "")
+        tiltak_sist = st.session_state.get(f"tiltak_sist_{block_id}", "")
+        status_sist = st.session_state.get(f"status_sist_{block_id}", "")
+        status_no = st.session_state.get(f"status_no_{block_id}", "")
+        fungerte = st.session_state.get(f"fungerte_{block_id}", "")
+        mal_neste = st.session_state.get(f"mal_neste_{block_id}", "")
+        tiltak_neste = st.session_state.get(f"tiltak_neste_{block_id}", "")
 
         full_summary += (
             f"\n### KPI {i+1}\n"
@@ -72,10 +72,10 @@ if st.button("📋 Vis oppsummering"):
     st.markdown(full_summary)
 
     short_summary = "\n📌 **KORT OPPSUMMERING**\n"
-    for i, block in enumerate(st.session_state.kpi_blocks):
-        kpi = st.session_state.get(f"kpi_{i}", "")
-        mal_neste = st.session_state.get(f"mal_neste_{i}", "")
-        tiltak_neste = st.session_state.get(f"tiltak_neste_{i}", "")
+    for i, block_id in enumerate(st.session_state.kpi_blocks):
+        kpi = st.session_state.get(f"kpi_{block_id}", "")
+        mal_neste = st.session_state.get(f"mal_neste_{block_id}", "")
+        tiltak_neste = st.session_state.get(f"tiltak_neste_{block_id}", "")
         short_summary += (
             f"\n**{i+1}. {kpi}**\n\n"
             f"🎯 **Mål til neste gang**  \n{mal_neste}\n\n"
