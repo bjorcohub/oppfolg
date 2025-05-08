@@ -69,50 +69,31 @@ if st.button("📋 Vis oppsummering"):
         mal_neste = st.session_state.get(f"mal_neste_{i}", "")
         tiltak_neste = st.session_state.get(f"tiltak_neste_{i}", "")
 
-        full_summary += f"""
-### KPI {i+1}
-**KPI**  
-{kpi}
-
-**Tiltak sist**  
-{tiltak_sist}
-
-**Status sist**  
-{status_sist}
-
-**Status no**  
-{status_no}
-
-**Kva fungerte / fungerte ikkje**  
-{fungerte}
-
-**Mål til neste gang**  
-{mal_neste}
-
-**Tiltak til neste gang**  
-{tiltak_neste}
-
----
-"""
+        full_summary += (
+            f"\n### KPI {i+1}\n"
+            f"**KPI**  \n{kpi}\n\n"
+            f"**Tiltak sist**  \n{tiltak_sist}\n\n"
+            f"**Status sist**  \n{status_sist}\n\n"
+            f"**Status no**  \n{status_no}\n\n"
+            f"**Kva fungerte / fungerte ikkje**  \n{fungerte}\n\n"
+            f"**Mål til neste gang**  \n{mal_neste}\n\n"
+            f"**Tiltak til neste gang**  \n{tiltak_neste}\n\n"
+            f"---\n"
+        )
 
     st.markdown(full_summary)
 
-    short_summary = f"\n📌 **KORT OPPSUMMERING**\n"
+    short_summary = "\n📌 **KORT OPPSUMMERING**\n"
     for i, block in enumerate(st.session_state.kpi_blocks):
         kpi = st.session_state.get(f"kpi_{i}", "")
         mal_neste = st.session_state.get(f"mal_neste_{i}", "")
         tiltak_neste = st.session_state.get(f"tiltak_neste_{i}", "")
-        short_summary += f"""
-**{i+1}. {kpi}**
-
-🎯 **Mål til neste gang**  
-{mal_neste}
-
-🛠️ **Tiltak til neste gang**  
-{tiltak_neste}
-
----
-"
+        short_summary += (
+            f"\n**{i+1}. {kpi}**\n\n"
+            f"🎯 **Mål til neste gang**  \n{mal_neste}\n\n"
+            f"🛠️ **Tiltak til neste gang**  \n{tiltak_neste}\n\n"
+            f"---\n"
+        )
 
     st.markdown(short_summary)
 
