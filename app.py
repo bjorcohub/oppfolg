@@ -106,7 +106,3 @@ if st.button("📋 Vis oppsummering"):
 
     st.markdown(short_summary)
 
-    # Combined for copy
-    combined_summary = full_summary + "\n\n" + short_summary
-    st.markdown("### 📋 Kopier og lim inn i e-post")
-    st.text_area("Trykk Ctrl+C for å kopiere", combined_summary.strip(), height=600)
