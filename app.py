@@ -87,7 +87,7 @@ if st.button("📋 Vis oppsummering"):
 
     st.markdown(full_summary)
 
-    short_summary = f"\n📌 **KORT OPPSUMMERING**\n"
+    short_summary = f"\n📌 **TIL NESTE GANG**\n"
     for i, block in enumerate(st.session_state.kpi_blocks):
         kpi = st.session_state.get(f"kpi_{i}", "")
         mal_neste = st.session_state.get(f"mal_neste_{i}", "")
