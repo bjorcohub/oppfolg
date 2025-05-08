@@ -110,6 +110,3 @@ if st.button("📋 Vis oppsummering"):
 
 🛠️ **Tiltak til neste gang**  
 {tiltak_neste}
-
----
-"
