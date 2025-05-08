@@ -49,7 +49,6 @@ if st.button("📋 Vis oppsummering"):
     st.subheader(heading)
 
     full_summary = f"{heading}\n\n🧾 FULL OPPSUMMERING\n"
-    short_summary = "📌 KORT OPPSUMMERING\n"
 
     for i, block in enumerate(st.session_state.kpi_blocks):
         kpi = st.session_state.get(f"kpi_{i}", "")
@@ -60,32 +59,54 @@ if st.button("📋 Vis oppsummering"):
         mal_neste = st.session_state.get(f"mal_neste_{i}", "")
         tiltak_neste = st.session_state.get(f"tiltak_neste_{i}", "")
 
-        full_summary += f"""KPI {i+1}:
-**- KPI:** {kpi}
-**- Tiltak sist:** {tiltak_sist}
-**- Status sist:** {status_sist}
-**- Status no:** {status_no}
-**- Kva fungerte / fungerte ikkje:** {fungerte}
-**- Mål til neste gang:** {mal_neste}
-**- Tiltak til neste gang:** {tiltak_neste}
+        full_summary += f"""
+### KPI {i+1}
+**KPI**  
+{kpi}
+
+**Tiltak sist**  
+{tiltak_sist}
+
+**Status sist**  
+{status_sist}
+
+**Status no**  
+{status_no}
+
+**Kva fungerte / fungerte ikkje**  
+{fungerte}
+
+**Mål til neste gang**  
+{mal_neste}
+
+**Tiltak til neste gang**  
+{tiltak_neste}
+
 ---
 """
 
-        short_summary += f"""\n{i+1}. {kpi}
-🎯 Mål:
+    st.markdown(full_summary)
+
+    short_summary = f"\n📌 **KORT OPPSUMMERING**\n"
+    for i, block in enumerate(st.session_state.kpi_blocks):
+        kpi = st.session_state.get(f"kpi_{i}", "")
+        mal_neste = st.session_state.get(f"mal_neste_{i}", "")
+        tiltak_neste = st.session_state.get(f"tiltak_neste_{i}", "")
+        short_summary += f"""
+**{i+1}. {kpi}**
+
+🎯 **Mål til neste gang**  
 {mal_neste}
-🛠️ Tiltak:
+
+🛠️ **Tiltak til neste gang**  
 {tiltak_neste}
+
+---
 """
 
-    # Display summaries
-    st.markdown("### 🧾 Full oppsummering")
-    st.markdown(full_summary)
-    st.markdown("### 📌 Kort oppsummering")
-    st.text(short_summary)
+    st.markdown(short_summary)
 
-    # Combined output
+    # Combined for copy
     combined_summary = full_summary + "\n\n" + short_summary
-
     st.markdown("### 📋 Kopier og lim inn i e-post")
-    st.text_area("Trykk Ctrl+C for å kopiere", combined_summary, height=600)
+    st.text_area("Trykk Ctrl+C for å kopiere", combined_summary.strip(), height=600)
