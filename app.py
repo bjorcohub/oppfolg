@@ -14,12 +14,15 @@ name = st.text_input("Navn")
 dato = st.date_input("Dato", value=date.today())
 
 def remove_block(block_id):
-    st.session_state.to_remove_index = block_id
+    st.session_state.kpi_blocks = [b for b in st.session_state.kpi_blocks if b != block_id]
+    for suffix in ["kpi", "tiltak_sist", "status_sist", "status_no", "fungerte", "mal_neste", "tiltak_neste"]:
+        st.session_state.pop(f"{suffix}_{block_id}", None)
+    st.experimental_rerun()
 
 # Render KPI blocks
-for i, block_id in enumerate(st.session_state.kpi_blocks):
+for block_id in st.session_state.kpi_blocks:
     with st.container():
-        st.markdown(f"### KPI {i+1}")
+        st.markdown(f"### KPI")
         kpi = st.text_area("KPI", height=50, key=f"kpi_{block_id}")
         tiltak_sist = st.text_area("Tiltak sist", height=100, key=f"tiltak_sist_{block_id}")
         status_sist = st.text_area("Status sist", height=100, key=f"status_sist_{block_id}")
@@ -32,7 +35,7 @@ for i, block_id in enumerate(st.session_state.kpi_blocks):
         if st.button("Fjern", key=f"remove_{block_id}"):
             remove_block(block_id)
 
-# Add button
+# Add new KPI block
 if st.button("➕ Legg til KPI"):
     st.session_state.kpi_blocks.append(str(uuid.uuid4()))
 
@@ -47,6 +50,7 @@ if st.button("📋 Vis oppsummering"):
     st.subheader(heading)
 
     full_summary = f"{heading}\n\n🧾 FULL OPPSUMMERING\n"
+    short_summary = "\n📌 **KORT OPPSUMMERING**\n"
 
     for i, block_id in enumerate(st.session_state.kpi_blocks):
         kpi = st.session_state.get(f"kpi_{block_id}", "")
@@ -69,13 +73,6 @@ if st.button("📋 Vis oppsummering"):
             f"---\n"
         )
 
-    st.markdown(full_summary)
-
-    short_summary = "\n📌 **KORT OPPSUMMERING**\n"
-    for i, block_id in enumerate(st.session_state.kpi_blocks):
-        kpi = st.session_state.get(f"kpi_{block_id}", "")
-        mal_neste = st.session_state.get(f"mal_neste_{block_id}", "")
-        tiltak_neste = st.session_state.get(f"tiltak_neste_{block_id}", "")
         short_summary += (
             f"\n**{i+1}. {kpi}**\n\n"
             f"🎯 **Mål til neste gang**  \n{mal_neste}\n\n"
@@ -83,19 +80,7 @@ if st.button("📋 Vis oppsummering"):
             f"---\n"
         )
 
-    st.markdown(short_summary)
-
-    # Combined output
     combined_summary = full_summary + "\n\n" + short_summary
+
     st.markdown("### 📋 Kopier og lim inn i e-post")
     st.text_area("Trykk Ctrl+C for å kopiere", combined_summary.strip(), height=600)
-
-# Handle block removal AFTER widgets render
-if "to_remove_index" in st.session_state:
-    block_id = st.session_state.to_remove_index
-    if block_id in st.session_state.kpi_blocks:
-        st.session_state.kpi_blocks.remove(block_id)
-        for prefix in ["kpi", "tiltak_sist", "status_sist", "status_no", "fungerte", "mal_neste", "tiltak_neste"]:
-            st.session_state.pop(f"{prefix}_{block_id}", None)
-    del st.session_state.to_remove_index
-    st.experimental_rerun()
