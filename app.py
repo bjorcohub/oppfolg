@@ -106,4 +106,3 @@ if st.button("📋 Vis oppsummering"):
 """
 
     st.markdown(short_summary)
-~
